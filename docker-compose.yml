@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  admin:
+    build:
+      context: ./php53-apache
+    ports:
+      - 88:80
+    volumes:
+      - ../admin:/var/www/html
+  client:
+    build:
+      context: ./php53-apache
+    ports:
+      - 89:80
+    volumes:
+      - ../client:/var/www/html
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${MYSQL_HOST}
+    restart: always
+    env_file:
+      - ".env"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "8989:3306"
+    volumes:
+      - "./db:/var/lib/mysql"
